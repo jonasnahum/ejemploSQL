@@ -2,7 +2,7 @@ var intravenous = require("intravenous");
 
 //local modules
 var DbConnection = require("./../database/dbConnection");
-DbConnection.$inject = ["mysql"];
+//DbConnection.$inject = ["mysql"];
 
 var ClientesApi = require("./clientesApi");
 ClientesApi.$inject = ["dbConnection"];

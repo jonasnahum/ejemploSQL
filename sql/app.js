@@ -5,13 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var container = require('./src/container');
-var db = container.get('dbConnection');
-db.connect({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "store"
-});
+
+
 var clientes = container.get("clientesController");
 
 var routes = require('./routes/index');

@@ -5,6 +5,7 @@ var ClientesApi = (function() {
      //curl http://localhost:3000/clientes/api/
      ClientesApi.prototype.getAll = function(req, res, next) {
          var that = this;
+
          that.con.query('SELECT * FROM books',function(err,rows){
            if(err)
              console.log(err);
