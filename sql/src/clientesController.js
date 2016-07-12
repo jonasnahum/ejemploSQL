@@ -7,10 +7,11 @@ module.exports = (function() {
         var router = this.router;
 
         router.get('/', clientesApi.getAll.bind(clientesApi));
-      /*  router.get('/:id', clientesApi.getOne.bind(clientesApi));
+        router.get('/:id', clientesApi.getOne.bind(clientesApi));
         router.post('/', clientesApi.save.bind(clientesApi));
+        router.put('/:id', clientesApi.update.bind(clientesApi));
         router.delete('/:id', clientesApi.delete.bind(clientesApi));
-        */
+        
     }
 
     return ClientesController;
