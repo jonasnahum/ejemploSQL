@@ -1,6 +1,6 @@
 var ClientesApi = (function() {
     var ClientesApi = function(dbConnection) {
-        this.con = dbConnection;
+        this.con = dbConnection.connect();
     };
      //curl http://localhost:3000/clientes/api/
      ClientesApi.prototype.getAll = function(req, res, next) {
