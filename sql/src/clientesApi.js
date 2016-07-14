@@ -1,80 +1,62 @@
 var ClientesApi = (function() {
     var ClientesApi = function(dbConnection) {
         this.con = dbConnection.connect();
+        this.table = ["books"];
     };
      //curl http://localhost:3000/clientes/api/
      ClientesApi.prototype.getAll = function(req, res, next) {
          var that = this;
-         that.con.query('SELECT * FROM books',function(err,rows){
-           if(err)
-             console.log(err);
-           console.log('Data received from Db:\n');
-           console.log(rows);
-           return res.json(rows);
-         });
+         // doble ?? query identifiers ? para valores.
+         that.con.query("SELECT * FROM ??",that.table,function(err,rows){
+            if(err) {
+                console.log(err);
+            } else {
+                console.log(rows);
+            }
+        });
       };
 
       //curl http://localhost:3000/clientes/api/3
       ClientesApi.prototype.getOne = function(req, res, next) {
           var that = this;
-          var id = req.params.id;
-          that.con.query('SELECT * FROM books WHERE ID = ' + id,function(err,rows){
+          that.con.query("SELECT * FROM ?? WHERE ID = ?",[that.table,req.params.id],function(err,rows){
             if(err)
               console.log(err);
-            console.log('Data received from Db:\n');
             console.log(rows);
-            return res.json(rows);
           });
       };
-//curl -i -H "Content-Type: application/json" -d '{ "title": "el principito", "author": "josepth" }' http://localhost:3000/clientes/api/
-    ClientesApi.prototype.save = function(req, res, next){
-        var that = this;
-        var title = JSON.stringify(req.body.title);
-        var author = JSON.stringify(req.body.author);
 
-        var text = "INSERT INTO books (title, author) VALUES (";
-        var coma = ",";
-        var cierra = ")";
-        var total = text + title + coma + author + cierra;
+      //curl -i -H "Content-Type: application/json" -d '{ "title": "diario de una princesa", "author": "patty" }' http://localhost:3000/clientes/api/
+      ClientesApi.prototype.save = function(req, res, next){
+          var that = this;
+          var post = {title: req.body.title, author:req.body.author};
+          that.con.query("INSERT INTO ?? SET ?", [that.table,post], function(err,results,fields){
+            if(err)
+              console.log(err);
+            console.log(results);
+          });
+        };
 
+        //curl -X PUT -i -H "Content-Type: application/json" -d '{ "title": "el principito", "author": "josepth" }' http://localhost:3000/clientes/api/4
+        ClientesApi.prototype.update = function(req, res, next){
+            var that = this;
+            var post = {title: req.body.title, author:req.body.author,};
+            that.con.query("UPDATE ?? SET ? WHERE ID = ?", [that.table, post, req.params.id], function(err,rows){
+              if(err)
+                console.log(err);
+              console.log(rows);
+            });
+        };
 
-          that.con.query(total,function(err,rows){
-          if(err)
-            console.log(err);
-          console.log(rows);
-          return res.json(rows);
-        });
-      };
-
-//curl -X PUT -i -H "Content-Type: application/json" -d '{ "title": "el principito", "author": "josepth" }' http://localhost:3000/clientes/api/4
-    ClientesApi.prototype.update = function(req, res, next){
-        var that = this;
-        var title = JSON.stringify(req.body.title);
-        var author = JSON.stringify(req.body.author);
-        var text1 = "UPDATE books SET title = "
-        var coma = ",";
-        var total = text1 + title + coma + "author = " + author + " WHERE id = " + req.params.id;
-        console.log(total);
-          that.con.query(total,function(err,rows){
-          if(err)
-            console.log(err);
-          console.log(rows);
-          return res.json(rows);
-        });
-      };
-
-//curl -X "DELETE" http://localhost:3000/clientes/api/1
-    ClientesApi.prototype.delete = function(req, res, next) {
-        var that = this;
-        var text = "DELETE FROM books WHERE id = " + req.params.id;
-        that.con.query(text,function(err,rows){
-          if(err)
-            console.log(err);
-          console.log(rows);
-          return res.json(rows);
-        });
-    };
-
+        //curl -X "DELETE" http://localhost:3000/clientes/api/10
+        ClientesApi.prototype.delete = function(req, res, next) {
+            var that = this;
+            that.con.query("DELETE FROM ?? WHERE ID = ?", [that.table,req.params.id], function(err,rows){
+              if(err)
+                console.log(err);
+              console.log(rows);
+            });
+        };
     return ClientesApi;
 })();
 module.exports = ClientesApi;
